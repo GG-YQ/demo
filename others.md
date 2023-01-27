@@ -54,6 +54,9 @@ git rm -r --cached .
 git add .
 git commit -m 'update .gitignore'
 ```
+#在git bash命令行git commit -m "messages"可以正常commit，但是使用vscode工具栏commit一直卡住：vs code升级后，原来提交代码时，是在vscode里直接填写message的，升级之后没有了，会直接对代码进行提交，这样的话导致服务器拒绝。
+解决办法：在设置里改回旧版本的提交方式。file>>preferences>>settings，取消勾选“use editer as commit input”。
+
 
 # WPS
 1. 显示格式TEXT()函数
