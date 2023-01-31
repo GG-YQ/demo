@@ -115,4 +115,4 @@ DATAFILE="filename" | DATATABLE="tablename" (Not used for Microsoft Excel files)
 - SAS data-set-option(s)： SAS data set的选项，比如可以使用where data set option.
 - OUT=<libref.>SAS data-set：数据集的名子
 - REPLACE：如果数据集已经存在，是否替换。
-- <file-format-specific-statements>：文件格式说明，比如，对于Excel文档，GETNAMES=YES | NO可以规定是否使用文档中的第一行来产生SAS 变量，SHEET=sheet-name来指定文档中sheet的名子，每个语句是以逗号作为分割符。
+- file-format-specific-statements：文件格式说明，比如，对于Excel文档，GETNAMES=YES | NO可以规定是否使用文档中的第一行来产生SAS 变量，SHEET=sheet-name来指定文档中sheet的名子，每个语句是以逗号作为分割符。
