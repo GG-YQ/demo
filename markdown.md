@@ -1,3 +1,8 @@
+---
+html:
+    toc: true
+---
+
 - [1 文本段落](#1-文本段落)
   - [1.1 文本](#11-文本)
   - [1.2 段落](#12-段落)
@@ -15,21 +20,18 @@
 
 
 !!! summary
-    
-    总结
+    [github-doc](https://docs.github.com/zh/get-started/writing-on-github)  
+    [MPE](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)  
+    [MPE总结](https://kz16.top/md/)  
+    [设置边栏](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/toc)  
 
 !!! warning
-
-    警告
+    github警告标注无效参考[admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/)  
+    mermaid、脚注在vscode github styling下无效，github下有效  
 
 !!! Note
-    
-    标注
+    无  
 
-[github-doc](https://docs.github.com/zh/get-started/writing-on-github)  
-[MPE](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)  
-[总结](https://kz16.top/md/)  
-[总结警告标注无效](https://squidfunk.github.io/mkdocs-material/reference/admonitions/)、mermaid无效、脚注无效
 
 # 1 文本段落
 ## 1.1 文本
@@ -120,6 +122,15 @@ Markdown 区块引用是在段落开头使用 > 符号 ，然后后面紧跟一�
 | 插入音视频 | <iframe src="链接地址" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>，同时还可以通过添加属性" style="VISIBILITY: hidden"来隐藏iframe，看上去就像是背景音乐一样|
 
 ## 3.2 进阶html
+
+公式跳转：一般LaTeX引擎或者MathJax支持的\ref、\label功能在KaTeX中是没有的。KaTeX利用HTML的超链接功能设置锚点实现公式跳转，例如  
+公式：<a id= "equ1"></a>  
+$$x \tag{1.1}$$  
+公式：<a id= "equ2"></a>  
+$$y \tag{1.2}$$  
+
+通过<a href="#equ1">1.1</a>引用公式1.1；通过<a href="#equ2">1.2</a>引用公式1.2。
+
 <details>
 <summary>点我查看折叠内容</summary>
 
@@ -277,10 +288,3 @@ More info in: <https://momentjs.com/docs/#/parsing/string-format/>
     task4      : 24d
 ```
 
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
