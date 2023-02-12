@@ -2,6 +2,7 @@
 - [pandoc](#pandoc)
 - [VSCode](#vscode)
 - [git](#git)
+- [anaconda](#anaconda)
 - [WPS](#wps)
 - [SQL](#sql)
 - [SAS](#sas)
@@ -55,6 +56,22 @@
         $ mkdir git-tutorial  
         $ cd git-tutorial  
         ```  
+    - 主分支设置为main: github把master默认分支改为了main, 要做相应调整，把本地git的master改成main。
+        - 把默认分支改为main
+        ```
+        \\使用git init初始化项目时, 默认使用main做为主分支
+        $ git config --global init.defaultBranch main
+        \\或者在执行git init时指定初始分支名称
+        $ git init -b main
+        ```
+        - 修改已创建项目的主分支为main
+        ```
+        \\把当前master分支改名为main；删除远程分支；推送本地分支到远程仓库
+        $ git branch -M master main  或直切换到主分支master，执行$ git branch -M main
+        $ git push origin --delete master
+        $ git push -u origin main
+        ```  
+
     - 远程库的连接和解除
         ```
         //第一次通过git去使用GitHub需要全局设置：--global针对系统上所有仓库有效；-e针对当前仓库有效
@@ -177,6 +194,41 @@
         $ git diff
         $ git status
         ```  
+# anaconda
+
+- 基本命令
+    ```
+    帮助：conda -help 或者 conda -h
+    创建环境：conda create -n <envname> <python版本>，比如 conda create -n py2 python=2.7创建python2.7版本的环境，命名为py2
+    查看已经安装成功的所有环境：conda env list
+    进入环境：conda activate <env name>
+    conda deactivate 退出当前环境
+    全部更新命令：conda update –-all
+    anoconda重置：anaconda-navigator –-reset
+
+    conda install <package name>	#安装指定的包
+    conda list		#显示所有的安装包
+    conda remove -n <env name> --all	#删除指定环境中所有的包，即删除环境，比如conda remove -n pytorch1.2 --all
+    conda remove/clean <package name>		#删除指定的包
+    conda --version 或者conda -V 		#查看conda 版本
+    在当前环境中安装包，：conda install <package_name>
+    当使用conda install无法进行安装时，可以使用pip进行安装：pip install <package_name>
+    在指定环境中安装包：conda install --name <env_name> <package_name>
+    更新所有包：conda update --all或conda upgrade –all
+    卸载当前环境中的包：conda remove <package_name>
+    搜索指定的包：conda search --full-name <package name> 
+    模糊查找：conda search <模糊词> 
+    ```
+- pip和conda
+pip只是包管理器，无法对环境进行管理，如果想在指定环境中使用pip进行安装包，则需要先切换到指定环境中，再使用pip命令安装包。pip无法更新python，因为pip并不将python视为包。pip可以安装一些conda无法安装的包；conda也可以安装一些pip无法安装的包。因此当使用一种命令无法安装包时，可以尝试用另一种命令。
+
+- conda环境复现
+    > 1. conda env export $\Rarr$ environment.yaml: 环境会被保存在 environment.yaml文件中。
+    > 2. 当我们想再次创建该环境，可根据.yaml文件复现：conda env create -f environment.yaml。
+    > 3. 移植过来的环境只是安装了原环境里用conda install等命令直接安装的包，用pip之类装的东西没有移植过来，需要重新安装。
+    > > pip freeze $\Rarr$ requirements.txt
+    pip导入requirements.txt中列出的库到系统
+    pip install -r requirements.txt
 
 # WPS
 1. 显示格式TEXT()函数

@@ -60,7 +60,9 @@ $$x+y=z \tag{1}$$
 求积运算，符号：$\prod^{x \to \infty}_{y \to 0}{\frac{x}{y}}$；$\coprod$  
 积分运算，符号：$\int^{\infty}_{0}{xdx}$；$\iint$；$\iiint$；$\oint$  
 积分运算，符号：$\displaystyle \int^{\infty}_{0}{xdx}$  
-微分运算，符号：$\frac{\partial x}{\partial y}$  
+偏微分运算，符号：$\frac{\partial x}{\partial y}$  
+微分: $\mathrm{d}x$  
+全微分：$\nabla x$  
 矩阵表示，符号：\begin{matrix} \end{matrix}，
 $$
 \left[ 
@@ -70,9 +72,8 @@ $$
     \vdots & \vdots & \ddots & \vdots\\
     9 & 10 & \cdots & 11
     \end{matrix} 
-\right]
+\right] 
 $$  
-下三角：$\nabla$  
 
 # 逻辑运算
 等于运算，符号：=，如：$x+y=z$  
@@ -124,12 +125,12 @@ $$
 二阶导数符号，符号\ddot{a}，如：$\ddot{a}$  
 上箭头，符号：\uparrow，如：$\uparrow$  
 上箭头，符号：\Uparrow，如：$\Uparrow$  
-下箭头，符号：\downarrow，如：$\downarrow$  
+下箭头，符号：\downarrow，如：$\downarrow$   
 下箭头，符号：\Downarrow，如：$\Downarrow$  
-左箭头，符号：\leftarrow，如：$\leftarrow$  
-左箭头，符号：\Leftarrow，如：$\Leftarrow$  
-右箭头，符号：\rightarrow，如：$\rightarrow$  
-右箭头，符号：\Rightarrow，如：$\Rightarrow$  
+左箭头，符号：\leftarrow，如：$\leftarrow$  $\larr$  
+左箭头，符号：\Leftarrow，如：$\Leftarrow$  $\Larr$  
+右箭头，符号：\rightarrow，如：$\rightarrow$  $\rarr$  
+右箭头，符号：\Rightarrow，如：$\Rightarrow$  $\Rarr$  
 底端对齐的省略号，符号：\ldots，如：$1,2,\ldots,n$  
 中线对齐的省略号，符号：\cdots，如：$x_1^2 + x_2^2 + \cdots + x_n^2$  
 竖直对齐的省略号，符号：\vdots，如：$\vdots$  
@@ -194,8 +195,7 @@ e+f&=g
 $$
 
 ## 靠左、居中、靠右
-{array}{c居中/l是左/r是右}
-
+- {array}{c居中/l是左/r是右}
 $$
 \begin{array}{l}
 aaa=aaaaa \\
@@ -203,7 +203,13 @@ a=a
 \end{array}
 $$
 
-
+- 自定义横向空格长度挤占右侧位置\hspace{50cm}
+$$
+\begin{array}{l}
+aaa=aaaaa \\
+a=a
+\end{array} \hspace{10cm}
+$$
 
 ## 希腊字母
 ```
