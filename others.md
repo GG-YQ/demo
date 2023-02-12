@@ -49,6 +49,9 @@
 - 插件：python、markdown all in one、markdown preview enhanced、copilot
 
 # git
+
+![](./graph/image1.png)
+
 - 基本用法
     - 用vs打开项目文件夹，进入项目目录：所有git命令都要在项目空间下进行，如果需要新建或进入其他目录则需要执行下面的代码
         ```
@@ -56,7 +59,7 @@
         $ mkdir git-tutorial  
         $ cd git-tutorial  
         ```  
-    - 主分支设置为main: github把master默认分支改为了main, 要做相应调整，把本地git的master改成main。
+    - 主分支设置为main: github把master默认分支改为了main，git要做相应调整，把本地git的master改成main。
         - 把默认分支改为main
         ```
         \\使用git init初始化项目时, 默认使用main做为主分支
@@ -64,9 +67,9 @@
         \\或者在执行git init时指定初始分支名称
         $ git init -b main
         ```
-        - 修改已创建项目的主分支为main
+        - 修改已创建并push过的项目的主分支为main
         ```
-        \\把当前master分支改名为main；删除远程分支；推送本地分支到远程仓库
+        \\把当前master分支改名为main；删除远程master分支，该分支为远程主分支时无法删除，只需在远程修改default branch为其他分支；推送本地分支到远程仓库。
         $ git branch -M master main  或直切换到主分支master，执行$ git branch -M main
         $ git push origin --delete master
         $ git push -u origin main
@@ -89,24 +92,29 @@
         ```  
     - 初始化
         ```$ git init```
-    - 提交到库：rm删除文件、add添加文件到暂存区；commit通过暂存区的指针将暂存区的快照提交到本地git库；push同步到远程库，第一次推送master分支时加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+    - 提交到库：rm删除文件、add添加文件到暂存区；commit通过暂存区的指针将暂存区的快照提交到本地git库；push同步到远程库，第一次推送main分支时加上了-u参数，Git不但会把本地的main分支内容推送到远程新的main分支，还会把本地的main分支和远程的main分支关联起来，在以后的推送或者拉取时就可以简化命令。
         ```
         $ git rm <file>
         $ git add xxxx.xxx
         $ git commit -m "first commit or some note"
-        $ git push -u origin master
+        $ git push -u origin main
         ```  
-    - 远程库其他操作
+    - 远程库操作详解
         ```
-        //切换到目标文件目录，clone拷贝仓库到本地让自己能够查看修改：有无仓库权限均可，适用本地为空
+        //clone：切换到目标文件目录，clone仓库到本地让自己能够查看修改，有无仓库权限均可，适用本地为空
         $ git clone git@github.com:username/reponame.git
-        //切换到目标文件目录，pull下载远程代码并合并：必须有权限
-        $ git pull origin master
-        //本地推送分支：使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交
-        $ git push origin branch-name
+
+        //pull：切换到目标文件目录，pull从远程获取代码并合并本地的版本，必须有仓库权限。pull相当于$ git fetch +$ git merge FETCH_HEAD的简写，命令格式为"$ git pull <远程主机名> <远程分支名>:<本地分支名>"，如果远程分支是与当前分支合并，则冒号后面的部分可以省略。
+        $ git pull origin main
+        //如果pull报错"refusing to merge unrelated histories"，原因是两个仓库不同而导致的，要添加参数--allow-unrelated-histories将两个项目合并。
+        $ git pull origin main --allow-unrelated-histories
+
+        //push：本地推送分支，格式为"$ git push <远程主机名> <本地分支名>:<远程分支名>"；如果本地分支名和远程分支名一样，可以省略":<远程分支名>"；如果远程主机中不存在该分支，那么会被创建；如果本地分支已经跟远程分支建立了追踪关系，那么可以省略"<远程主机名>"和":<远程分支名>"。push如果报错"Updates were rejected because the tip of your current branch is behind"，则需先通过pull更新本地版本再push。
+        $ git push origin main
+
         //在本地创建和远程分支对应的分支：本地和远程分支的名称最好一致
         $ git checkout -b branch-name origin/branch-name
-        //建立本地分支和远程分支的关联：
+        //建立本地分支和远程分支的关联
         $ git branch --set-upstream branch-name origin/branch-name
         ```  
     - git忽略文件设置：[模板参考](https://github.com/github/gitignore)；[忽略规则参考](https://www.cnblogs.com/kevingrace/p/5690241.html)
@@ -127,6 +135,13 @@
         git commit -m 'update .gitignore'
         ```  
 - 分支管理
+    - 分支查看
+        ```
+        //git branch命令会列出所有分支，当前分支前面会标一个*号
+        $ git branch
+        //git branch -vv命令，可以查看本地分支跟远程分支是否存在追踪关系
+        $ git branch -vv
+        ```  
     - 版本恢复
         ```$ git reset --hard <commit_id>```
     - 回退到上一个版本：
@@ -153,8 +168,6 @@
         $ git checkout <bname>
         $ git switch <bname>
         ```
-    - 查看当前分支：git branch命令会列出所有分支，当前分支前面会标一个*号
-        ```$ git branch```
     - 合并某分支到当前分支：通常，合并分支时，如果可能，Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
         ```
         $ git merge <name>
