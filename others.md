@@ -55,7 +55,7 @@
 - 基本用法
     - 用vs打开项目文件夹，进入项目目录：所有git命令都要在项目空间下进行，如果需要新建或进入其他目录则需要执行下面的代码
         ```
-        $ pwd  //查询当前目录  
+        $ pwd  //mac中查询当前目录，windows当前目录在命令头展示  
         $ mkdir git-tutorial  
         $ cd git-tutorial  
         ```  
@@ -83,7 +83,7 @@
         $ git config --global --list //查看操作是否完成
         $ ssh-keygen -t rsa -C "xxxx@xxx" //邮箱和上述邮箱一致，一直回车可略过密码等设置，找到id_rsa.pub，复制内容，添加到github的ssh keys
         $ ssh -T git@github.com //选择yes，验证是否成功
-        //建立连接：Git支持多种协议，包括https，但ssh协议速度最快
+        //建立连接：Git支持多种协议(包括https)，但ssh协议速度最快
         $ git remote add origin git@github.com:username/reponame.git
         不推荐 $ git remote add origin https://github.com/username/reponame.git
         //远程库的查询和删除：先用git remote -v查看远程库信息；然后用git remote rm根据名字删除，比如删除origin，即解除远程关联。
@@ -116,6 +116,14 @@
         $ git checkout -b branch-name origin/branch-name
         //建立本地分支和远程分支的关联
         $ git branch --set-upstream branch-name origin/branch-name
+
+        //git sparse checkout (稀疏检出)：切换到目标目录初始化init；建立连接；设置稀疏检出为true；echo指定要检出的部分；pull将指定的部分拉取到本地。后续push操作将只影响远程的该部分。
+        $ git init <project> 
+        $ git remote add origin https://*****.git
+        $ git config core.sparsecheckout true
+        $ echo "path1/" >> .git/info/sparse-checkout
+        $ echo "path2/" >> .git/info/sparse-checkout
+        $ git pull origin [branch]   //这里指定远程的分支
         ```  
     - git忽略文件设置：[模板参考](https://github.com/github/gitignore)；[忽略规则参考](https://www.cnblogs.com/kevingrace/p/5690241.html)
         ```
