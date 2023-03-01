@@ -100,6 +100,56 @@ Python第三方模块
 
 应用程序自定义模块
 
+## 多进程
+- python多进程中子进程的运行机制：每个子进程中，由于不同的进程之间有独立内存，不会共享，所以每个子进程是通过分别导入所在的脚本模块来实现目标函数的运行的。对于这个机制，有以下两点需要特别注意。
+    - 1、由于每个子进程是通过导入所在脚本的模块实现模块中函数的调用的，所以，为了避免将创建子进程的语句也被导入（因为这样就会造成无限循环创建子进程，这显然是不允许的，因此python禁止了在子进程中再创建子进程，否则会报错），创建子进程的语句必须在```if __name__=='__main__'```语句之后定义，或者如果创建子进程的语句是定义在一个函数中的，那么这个函数调用必须在```if __name__=='__main__'```语句之后，这是python多进程中的强制性语法规则。
+    - 2、由于子进程可直接调用的是被导入模块中的属性，因此，子进程中的目标函数应该是被导入的，这样子进程才可以调用到需要的目标函数，因此，目标函数必须在```if __name__=='__main__'```语句之前定义，如果是在该语句之后定义，那么由于被导入时这部分是不会被导入的，所以运行时就会报"被导入的主模块没有目标函数属性"这样的错误。
+- map、map_async、apply_async、imap、imap_unordered、
+    |pool类型|函数|参数|执行|结果|
+    |---|---|---|---|---|
+    |map|函数统一|iterable|阻塞并发执行：通过将改可迭代的对象统一转换为列表，并分解为块，将块发送到池中的工作进程中，因此整个列表可能会产生非常高的内存成本。执行完map任务后才会继续执行后续代码。|有序列表：需要等待全部Task执行完毕才返回list。|
+    |map_async|函数统一|iterable|异步并发执行：map任务执行不阻塞后续代码的执行|有序列表：会立即返回AsyncResult，但是在完成所有对象之前无法实际检索该对象的结果。此时它将返回映射所执行的相同列表，没有办法得到部分结果，在这个点上来说，它和map返回的情况相同。|
+    |apply_async|函数可变|可传入多参数|一次执行一个任务，通过异结果对象的get()方法以检索结果。该get()方法将阻塞直到功能完成。也可在函数完成时调用回调方法来代替get()。|
+    |imap|函数统一|iterable|一个个调用：一次遍历iterable的一个元素，并将它们分别发送到工作进程，因此不需要将整个iterable转换为列表存在内存中，但缺少分块也导致大型迭代的性能较慢，可以通过传递大于默认值1的chunksize参数来减轻这种情况。|结果有序：按顺序等待Task的执行结果，且可以尽快返回执行完的iterable元素的结果，而不必等待所有进程完成工作。|
+    |imap_unordered|函数统一|iterable|一个个调用|结果无序：无论输入可迭代的顺序如何，会优先迭代到先执行完成的Task。|
+    |starmap、starmap_async|与map和map_async的区别是，starmap和starmap_async 可以传入多个参数|
+    - AsyncResult
+        > Pool.apply_async() 和 Pool.map_async() 返回对象所属的类。
+        get([timeout])：用于获取执行结果。如果 timeout 不是 None 并且在 timeout 秒内仍然没有执行完得到结果，则抛出 multiprocessing.TimeoutError 异常。如果远程调用发生异常，这个异常会通过 get() 重新抛出。
+        wait([timeout])：阻塞，直到返回结果，或者 timeout 秒后超时。
+        ready()：返回执行状态，是否已经完成。
+        successful()：判断调用是否已经完成并且未引发异常。 如果还未获得结果则将引发 ValueError。
+
+- [子进程print无法打印](https://stackoverflow.com/questions/29629103/simple-python-multiprocessing-function-doesnt-output-results/29632397#29632397)：spyder使用的stdout和windows不支持forking，所以无法打印子进程内容。替代方案
+    - 返回值替代打印
+        ```
+        # 全部任务执行完一起打印
+        def func():
+            return r
+        results=pool.map()
+        pool.close()
+        pool.join()
+        for result in results:
+            print(result) #print func返回的r
+
+        # 执行完一个打印一个
+        def func():
+            return r
+        results=pool.imap_unordered()
+        for result in results:
+            print(result)  #print func返回的r
+        pool.close()
+        pool.join()
+        ``` 
+    - 将各个进程日志打印到文件
+    - callback和error_callback
+        - 自定义error_callback的报错捕捉调用函数；
+        - 使用traceback：multiprocessing.get_logger().error()+multiprocessing.log_to_stderr()
+
+- 进程间通信
+    - pipe比queue快
+    - 共享内存Manager：Pipe、Queue把需要通信的信息从内存里深拷贝了一份给其他线程使用（需要分发的线程越多，其占用的内存越多）。而共享内存会由解释器负责维护一块共享内存（而不用深拷贝），这块内存每个进程都能读取到，读写的时候遵守管理（因此不要以为用了共享内存就一定变快）。
+
 ## IO
 
 ### 文件读存
@@ -811,6 +861,35 @@ selenium是浏览器测试自动化工具，很容易完成鼠标点击、翻页
 
     #分组技术：排名rank()、标准化zscore；分组因子暴露pd.ols().beta；分位数分析pd.qcut()和groupby()；
     ```
+## pytorch
+## 安装
+gpu版本训练时可以选择gpu或者cpu进行训练，cpu版本只能选择cpu进行训练。
+- 安装顺序
+    - 安装annaconda
+    - 安装cuda、cuDNN
+        > 1、cuda版本：打开NVIDIA控制面板，查看当前驱动所支持的最高CUDA版本；在pytorch官网确定当前支持哪些cuda版本。
+        2、[下载安装cuda](https://developer.nvidia.com/cuda-toolkit-archive)：CUDA Toolkit版本不能高于最高驱动支持的版本以及必须在pytorch支持的范围内。cmd验证CUDA是否安装成功，输入nvcc –V
+        3、[下载安装cuDNN](https://developer.nvidia.com/cudnn)：cuDNN版本和cuda版本对应。cmd验证cuDNN是否安装成功，Result = PASS即成功
+        > > cd C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.0\extras\demo_suite
+        bandwidthTest.exe
+        deviceQuery.exe
+    - 安装pytorch：
+        - annaconda创建并激活虚拟环境
+            ```
+            conda create -n pytorch-gpu-cuda117
+            conda activate pytorch-gpu-cuda117
+            ```
+        - [pytorch官网选择和cuda版本对应的安装代码](https://pytorch.org/get-started/locally/)：在运行安装命令时注意去掉后边的 -c pytorch（-c 的意思是去哪个地方下载安装文件，使用-c pytorch意思去pytorch官网下载好像，安装anaconda并换源之后，去掉这个可以下载的快一些 ）https://blog.csdn.net/qq_36944952/article/details/109460760
+            ```
+            conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+            ```
+            - [更换下载源方法](https://blog.csdn.net/opencv_fjc/article/details/106186785)
+        - 验证是否安装成功：.py
+            ```
+            import torch
+            prin(torch.__version__)
+            print(torch.cuda.is_available())
+            ```
 
 # 常用库
 
