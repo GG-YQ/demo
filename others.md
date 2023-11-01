@@ -3,6 +3,7 @@
 - [VSCode](#vscode)
 - [git](#git)
 - [anaconda](#anaconda)
+  - [基本命令](#基本命令)
 - [WPS](#wps)
 - [SQL](#sql)
 - [SAS](#sas)
@@ -47,6 +48,9 @@
 - 代码目录下生成的".vscode"文件夹只对阅读代码有影响而对编译器无影响，并且这个文件夹产生的数据极大，远超出github仓库允许的容量(100M)，一般不push。
 - 自动格式化需设置忽略排序：可能会产生import依赖问题
 - 插件：python、markdown all in one、markdown preview enhanced、copilot
+- 切换python虚拟环境
+    > 1、分别在venv Folders 和 venv Path中添加虚拟环境文件目录路径，重启VScode设置生效
+    2、查看——命令面板——Python: Select Interpreter——选择要使用的环境的python解释器
 
 # git
 
@@ -216,20 +220,21 @@
         $ git status
         ```  
 # anaconda
-
-- 基本命令
+## 基本命令
     ```
     帮助：conda -help 或者 conda -h
-    创建环境：conda create -n <envname> <python版本>，比如 conda create -n py2 python=2.7创建python2.7版本的环境，命名为py2
+    
+    创建环境：conda create -n <envname> <python版本>，比如 conda create -n py2 python=2.7创建python2.7版本的环境，命名为py2。若没有指定python则只创建一个空conda环境。
     查看已经安装成功的所有环境：conda env list
     进入环境：conda activate <env name>
-    conda deactivate 退出当前环境
+    退出当前环境：conda deactivate 
+    conda remove -n <env name> --all	#删除指定环境中所有的包，即删除环境，比如conda remove -n pytorch1.2 --all
     全部更新命令：conda update –-all
     anoconda重置：anaconda-navigator –-reset
 
+
     conda install <package name>	#安装指定的包
     conda list		#显示所有的安装包
-    conda remove -n <env name> --all	#删除指定环境中所有的包，即删除环境，比如conda remove -n pytorch1.2 --all
     conda remove/clean <package name>		#删除指定的包
     conda --version 或者conda -V 		#查看conda 版本
     在当前环境中安装包，：conda install <package_name>
@@ -250,6 +255,10 @@ pip只是包管理器，无法对环境进行管理，如果想在指定环境�
     > > pip freeze $\Rarr$ requirements.txt
     pip导入requirements.txt中列出的库到系统
     pip install -r requirements.txt
+
+- 切换安装源
+    - 切换镜像：pip3 install numpy scipy matplotlib -i https://pypi.tuna.tsinghua.edu.cn/simple
+    - 切换本地whl：cd到whl目录，运行pip install xxx.whl
 
 # WPS
 1. 显示格式TEXT()函数

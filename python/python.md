@@ -33,28 +33,31 @@ getattr()、setattr()以及hasattr()
 callable()函数：callable(object)：若object对象是可调用的，则返回True，否则返回False。注意，即使返回True也可能调用失败，但返回False调用一定失败。
 
 ## 函数
-
-- 定义默认参数要牢记一点：默认参数必须指向不变对象
-
-- 可变参数：可变参数传入的参数个数是可变的，可以是1个、2个到任意个，还可以是0个。*p2可变元组，\*\*p3为可变字典；调用时func直接接收可变元素，如果元素在元组list1和字典dict1里则可用func(p1,*list1,\*\*dict1)
+- 基本概念
+    - 定义默认参数：默认参数必须指向不变对象
+    - 可变参数：可变参数传入的参数个数是可变的，可以是1个、2个到任意个，还可以是0个。*p2可变元组，\*\*p3为可变字典；调用时func直接接收可变元素，如果元素在元组list1和字典dict1里则可用func(p1,*list1,\*\*dict1)
     ```
     def func(p1,*p2,**p3):
         expression
     ```
-- 函数名赋值给变量：此时变量可以指向该函数。
-
-- 传入函数：一个函数可以接收另一个函数作为参数，这种函数称之为高阶函数。例如内置的map()、reduce()、filter()、sorted()
+    - 函数名赋值给变量：此时变量可以指向该函数。
+    - 传入函数：一个函数可以接收另一个函数作为参数，这种函数称之为高阶函数。例如内置的map()、reduce()、filter()、sorted()
     ```
     def func(p1,func1):
         expression
     ```
-- 返回函数：高阶函数除了可以接受函数作为参数外，还可以把函数作为结果值返回。
-
-- 匿名函数：lambda
+    - 返回函数：高阶函数除了可以接受函数作为参数外，还可以把函数作为结果值返回。
+    - 匿名函数：lambda
 
 - 装饰器：decorator可以增强函数的功能，定义起来虽然有点复杂，但使用起来非常灵活和方便。
 
 - 偏函数：当函数的参数个数太多，需要简化时，使用functools.partial可以创建一个新的函数，这个新函数可以固定住原函数的部分参数，从而在调用时更简单。
+
+- hook函数
+    - hook函数是流程中预定义好的一个步骤，没有实现
+    - 挂载或者注册时， 流程执行就会执行这个钩子函数
+    - 回调函数和hook函数功能上是一致的
+    - hook设计方式带来灵活性，如果流程中有一个步骤，你想让调用方来实现，你可以用hook函数
 
 ## 类
 
@@ -863,7 +866,7 @@ selenium是浏览器测试自动化工具，很容易完成鼠标点击、翻页
     ```
 ## pytorch
 ## 安装
-gpu版本训练时可以选择gpu或者cpu进行训练，cpu版本只能选择cpu进行训练。
+gpu版本训练时可以选择gpu或者cpu进行训练，cpu版本只能选择cpu进行训练。推荐在conda虚拟环境中安装cuda、cudnn、pytorch(https://zhuanlan.zhihu.com/p/367740437、https://blog.csdn.net/m0_61102347/article/details/120922915)。
 - 安装顺序
     - 安装annaconda
     - 安装cuda、cuDNN
@@ -873,13 +876,16 @@ gpu版本训练时可以选择gpu或者cpu进行训练，cpu版本只能选择cp
         > > cd C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.0\extras\demo_suite
         bandwidthTest.exe
         deviceQuery.exe
-    - 安装pytorch：
+    - 安装pytorch
         - annaconda创建并激活虚拟环境
             ```
-            conda create -n pytorch-gpu-cuda117
+            conda create -n pytorch-gpu-cuda117 python=3.9
             conda activate pytorch-gpu-cuda117
             ```
-        - [pytorch官网选择和cuda版本对应的安装代码](https://pytorch.org/get-started/locally/)：在运行安装命令时注意去掉后边的 -c pytorch（-c 的意思是去哪个地方下载安装文件，使用-c pytorch意思去pytorch官网下载好像，安装anaconda并换源之后，去掉这个可以下载的快一些 ）https://blog.csdn.net/qq_36944952/article/details/109460760
+        - [推荐安装教程](https://www.bilibili.com/video/BV1eg411v7fK?p=2&vd_source=2a823ce6073f9ac24d39aaa3c97831d4)
+            > [torch和torchvision whl下载](https://download.pytorch.org/whl/torch_stable.html)放到pytorch-gpu-cuda117/Scripts
+            cmd进入pytorch-gpu-cuda117/Scripts，执行pip install torch-xxx.whl
+        - [(不推荐)pytorch官网选择和cuda版本对应的安装代码](https://pytorch.org/get-started/locally/)：在运行安装命令时注意去掉后边的 -c pytorch（-c 的意思是去哪个地方下载安装文件，使用-c pytorch意思去pytorch官网下载好像，安装anaconda并换源之后，去掉这个可以下载的快一些 ）https://blog.csdn.net/qq_36944952/article/details/109460760
             ```
             conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
             ```
@@ -887,7 +893,7 @@ gpu版本训练时可以选择gpu或者cpu进行训练，cpu版本只能选择cp
         - 验证是否安装成功：.py
             ```
             import torch
-            prin(torch.__version__)
+            print(torch.__version__)
             print(torch.cuda.is_available())
             ```
 
